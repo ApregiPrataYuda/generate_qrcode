@@ -63,9 +63,13 @@ class Createqr extends CI_Controller {
  //belum selesai
 	public function getarr(){
 		$post = $this->input->post(null, true);
+          $data = [
+			'title' => 'tes',
+			'allData' => $post
+		  ];
+		 $this->load->view('Pdf',$data);
 	
-		$html = $this->load->view('Pdf', $post, true);
-		$this->fungsi->Pdf_generator($html,'data','A4','potrait');
+	    
 	}
 
 

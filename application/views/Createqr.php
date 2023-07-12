@@ -115,6 +115,7 @@
                   <tr>
                     <th scope="col" style="width:5%">#</th>
                     <th scope="col">Kode</th>
+                    <th scope="col">QR</th>
                     <th scope="col" style="width:5%">Handle</th>
                   </tr>
                 </thead>
@@ -123,6 +124,9 @@
                   <tr>
                     <th scope="row"><?=$key + 1;?></th>
                     <td><?=$value->kode_qr;?></td>
+                    <td>
+                    <img src="<?=base_url('assets/image/Qrcode/'.$value->kode_qr.'.png')?>" style="width:20px;">
+                    </td>
                     <td>
                     <div class="form-check form-check-inline" id="cbtest">
                      <input type="checkbox" id="x" name="x" value="<?=$value->kode_qr?>">
@@ -187,16 +191,18 @@
                          }
                      })
 
-                    // $(document).on('click','#export', function() {
-                    //   var nilai = $("#x:checked").val();
-                    //   console.log(nilai);
-                    // })
+                   
 
                      $(document).on('click','#export', function() {
                       var getAll = new Array();
+
+                    
+
                       $('input[name="x"]:checked').each(function() {
                         getAll.push(this.value);
                       });
+
+
                        $.ajax({
                         type : 'POST',
                             url : '<?= site_url('Createqr/getarr')?>',
