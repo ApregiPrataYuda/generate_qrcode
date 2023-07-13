@@ -5,14 +5,13 @@ class Dashboard extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-		$this->load->model('Dash_m');
 	}
 
 	public function index()
 	{
-		$chart = $this->Dash_m->get()->result();
+
 	     $data = [
-            'charts' =>  $chart
+            'title' =>  'Dashboard'
 		 ];
 		$this->template->load('template','Dashboard', $data);
 	}

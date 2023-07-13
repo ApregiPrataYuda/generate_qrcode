@@ -13,28 +13,35 @@
         </div>
       </div><!-- /.container-fluid -->
     </section>
-
+<hr>
 <div class="col-12">
+<div id="flash" data-flash="<?= $this->session->flashdata('pesan') ?>"></div>
+      <div id="flasherr" data-flasherr="<?= $this->session->flashdata('error') ?>"></div>
             <div class="card card-secondary">
               <div class="card-header">
 
               <button type="button" class="btn btn-danger mb-1" data-toggle="modal" data-target="#exampleModal">
                 Create New Generate Qr
               </button>
-
-
-              <button type="button" class="btn btn-danger mb-1" data-toggle="modal" data-target="#sModal">
+              <!-- <button type="button" class="btn btn-danger mb-1" data-toggle="modal" data-target="#sModal">
                 selection
+              </button> -->
+              <button type="button" class="btn btn-danger mb-1" data-toggle="modal" data-target="#deleteModal">
+                Deleted selected
               </button>
-              
-                            
+              <!-- <a href="<?= base_url('Createqr/Exportallexcel') ?>" class="btn btn-danger mb-1">Export to pdf</a> -->
               </div>
               <div class="card-body">
-
-                <div class="row mt-2 ml-5">
+              <h5 class="card-title  font-weight-bold text-danger">Data QR-CODE</h5>
+                <P class="card-text">
+                generator Qr.
+                </P>
+                <div class="row  ml-5">
                 <div class="input-group">
+                <label><i class="fa fa-qrcode"> Search Data QR-Code</i></label>
                 <div class="form-outline  col-md-11">
-                    <input type="search" id="form1" class="form-control ml-2" placeholder="search"/>
+                    <input type="search" id="searching" class="form-control ml-2" placeholder="Realtime search"/>
+                <p id="message_info"></p>
                 </div>
                 </div>
 
@@ -143,7 +150,58 @@
               </div>
 
 
+
+              <!-- modal for deleted -->
+              <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">Data Code</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <form method="post" action="<?php echo base_url('Createqr/delbatch') ?>" id="form-delete">
+                        <table class="table" id="delTb">
+                    <thead class="thead-dark">
+                      <tr>
+                        <th><input type="checkbox" id="check-all"> Select All</th>
+                        <th scope="col" style="width:5%">No</th>
+                        <th scope="col">Kode</th>
+                        <th scope="col">QR</th>
+                      </tr>
+                    </thead>
+                      <tbody>
+                        <?php foreach ($allsdata as $key => $val) { ?>
+                             <tr>
+                             <td><input type='checkbox' class='check-item' name='kode_qr[]' value='<?=  $val->kode_qr ?>'></td>
+                              <td><?=  $key+1;?></td>
+                              <td><?=  $val->kode_qr ?></td>
+                              <td>
+                              <img src="<?=base_url('assets/image/Qrcode/'.$value->kode_qr.'.png')?>" style="width:30px;">
+                              </td>
+                             </tr>
+                        <?php } ?>
+                      </tbody>
+                      </table>
+                      </form>
+                    </div>
+                    <div class="row mb-2 ml-2">
+                      <div class="col">
+                        <button type="button" class="btn btn-danger btn-sm" id="btn-delete">DELETE</button>
+                        <p class="font-italic text-danger"><small>(*noted*: disarankan Untuk delete one by one)</small></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+
               <script>
+
+                //add code
                 $(document).ready(function(){
                      $(document).on('click', '#Add', function(){
                       var kode = $('#kode_qr').val()
@@ -191,18 +249,12 @@
                          }
                      })
 
-                   
-
+                      // for selected export
                      $(document).on('click','#export', function() {
                       var getAll = new Array();
-
-                    
-
                       $('input[name="x"]:checked').each(function() {
                         getAll.push(this.value);
                       });
-
-
                        $.ajax({
                         type : 'POST',
                             url : '<?= site_url('Createqr/getarr')?>',
@@ -221,9 +273,59 @@
                             }
                        })
                     })
-     
-    
 
-                    
+                    //for data tb
+                    $('#delTb').DataTable({
+                    "paging": true,
+                    "lengthChange": false,
+                    "searching": true,
+                    "ordering": false,
+                    "info": true,
+                    "autoWidth": false,
+                    "responsive": true,
+                  });
                 });
+
+
+
+                $(document).ready(function(){
+                  $(document).on('click','#check-all', function() {
+                      if($(this).is(":checked")){
+                        $(".check-item").prop("checked", true); 
+                      }else{
+                        $(".check-item").prop("checked", false);
+                      }
+                    })
+                    $("#btn-delete").click(function(){ // Ketika user mengklik tombol delete
+                    var confirm = window.confirm("Are You Sure, Delete?");
+                    if(confirm){
+                      $("#form-delete").submit();
+                    }
+                })
+
+
+                $('#searching').val("").focus();
+                $('#searching').keyup(function(e) {
+                  var text = $(this).val();
+                  if(text !=="" && e.keyCode===13){
+                      $('#searching').val(text).focus();
+                      $.ajax({
+                      type: 'POST',
+                      url: '<?= base_url('Createqr/searchings')?>',
+                      data: {"searching":text},
+                      beforeSend:function(response) {
+                        $('#message_info').html("you entered the wrong character...");
+                      },
+                      success:function(response) {
+                        $('#message_info').html(response);
+                      }
+                      });
+                  }
+                  e.preventDefault();
+                })
+               
+                })
               </script>
+
+
+              

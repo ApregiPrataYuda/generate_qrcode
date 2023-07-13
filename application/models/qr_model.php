@@ -46,4 +46,24 @@ public function singelexcel($codex)  {
     $query = $this->db->query("SELECT * FROM dataqr WHERE  kode_qr = '$codex' ");
     return $query;
 }
+
+public function delete($kode_qr){
+  $this->db->where_in('kode_qr', $kode_qr);
+$this->db->delete('dataqr');
+}
+
+
+function checkimg($kode_qr){
+  $this->db->from('dataqr');
+  $this->db->where_in('kode_qr', $kode_qr);
+ $query =  $this->db->get();
+ return $query;
+}
+
+
+function dataall() {
+  $sql = "SELECT * FROM dataqr ORDER BY kode_qr DESC";
+  $query = $this->db->query($sql)->result();
+  return $query;
+}
 }

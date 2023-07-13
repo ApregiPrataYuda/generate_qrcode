@@ -5,7 +5,7 @@ class Createqr extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-        $this->load->model('qr_model');
+        $this->load->model(['qr_model','Dash_m']);
 	}
 
 	public function index()
@@ -41,9 +41,10 @@ class Createqr extends CI_Controller {
 		$data['page'] = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
         $data['alldata'] = $this->qr_model->getdata($config['per_page'], $data['page'])->result();
 		$data['pagination'] =  $this->pagination->create_links();
-
-
 		$data['x'] = $this->qr_model->checkdata()->result();
+
+		//for del
+		$data['allsdata'] = $this->Dash_m->get()->result();
 		
 		$this->template->load('template','Createqr',$data);
 	}
@@ -83,5 +84,49 @@ class Createqr extends CI_Controller {
 		$data['row'] = $this->qr_model->singelexcel($codex)->row();
 		$data['title'] = 'Qr-Code.'.$codex;
 		$this->load->view('singelexcel', $data);
+	}
+
+
+	public function Exportallexcel()
+	{
+
+		$data['alls'] = $this->qr_model->dataall();
+		$html = $this->load->view('Exportallexcel', $data, true);
+		$this->fungsi->Pdf_generator($html,'data','F4','potrait');
+		
+	}
+
+
+	public function delbatch() {
+		$kode_qr = $_POST['kode_qr']; 
+		$item = $this->qr_model->checkimg($kode_qr)->row();
+		$target_file = './assets/image/Qrcode/'.$item->kode_qr.'.png';
+		unlink($target_file);
+        $this->qr_model->delete($kode_qr); 
+		if ($this->db->affected_rows() > 0) {
+			$this->session->set_flashdata('pesan', "Data Successfully Deleted");
+		}
+		redirect('Createqr');
+	}
+
+
+	function searchings() {
+		$result = trim($_POST['searching']);
+		$sql = $this->db->query("SELECT * FROM dataqr WHERE kode_qr = '$result' ")->row();
+        $data = [
+			'data' => $sql
+		];
+
+		if ($sql == null ) {
+			echo '<div class="alert alert-danger alert-dismissible fade show ml-3" role="alert">
+					<strong>Data not found !</strong>.
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+					</button>
+		 		  </div>';
+		}else {
+		    $this->load->view('search',$data);
+		}
+
 	}
 }
