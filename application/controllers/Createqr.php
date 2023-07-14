@@ -87,18 +87,15 @@ class Createqr extends CI_Controller {
 	}
 
 
-	public function Exportallexcel()
-	{
-
-		$data['alls'] = $this->qr_model->dataall();
-		$html = $this->load->view('Exportallexcel', $data, true);
-		$this->fungsi->Pdf_generator($html,'data','F4','potrait');
-		
-	}
-
 
 	public function delbatch() {
-		$kode_qr = $_POST['kode_qr']; 
+		// $kode_qr = $_POST['kode_qr'];
+		// var_dump($kode_qr); die();
+		// $x  = $kode_qr['kode_qr'];
+		$kode_qr = $this->input->post('kode_qr');
+		if ($kode_qr == null ) {
+		    $this->session->set_flashdata('error', "Please Select Data");
+		}
 		$item = $this->qr_model->checkimg($kode_qr)->row();
 		$target_file = './assets/image/Qrcode/'.$item->kode_qr.'.png';
 		unlink($target_file);
@@ -118,7 +115,7 @@ class Createqr extends CI_Controller {
 		];
 
 		if ($sql == null ) {
-			echo '<div class="alert alert-danger alert-dismissible fade show ml-3" role="alert">
+			echo '<div class="alert alert-danger alert-dismissible fade show ml-3 mt-3" role="alert">
 					<strong>Data not found !</strong>.
 					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
@@ -127,6 +124,43 @@ class Createqr extends CI_Controller {
 		}else {
 		    $this->load->view('search',$data);
 		}
+	}
 
+	public function validation()  {
+		$post = $this->input->post('kode_qr');
+		$sql = $this->db->query("SELECT * FROM dataqr WHERE kode_qr = '$post' ")->row();
+        if ($sql == null) {
+			echo '<small class="font-bold text-primary">';
+			echo "Kode Bisa Di Gunakan";
+			echo '</small>';
+		}else {
+			echo '<small class="font-italic text-danger">';
+			echo "Kode Sudah Di Gunakan";
+			echo '</small>';
+		}
+	}
+
+
+	function Exports() {
+		$getingall = $this->qr_model->ambilalldata();
+		$data = [
+			'getdata' => $getingall
+		];
+        $this->load->view('Exports', $data);
+	}
+
+
+	function selectex() {
+		$pointpost = $this->input->post('kode_qr');
+         
+		$x = $this->qr_model->alls($pointpost);
+
+		var_dump($x); die();
+        
+		 
+		 $data = [
+			'getsdata' => $pointpost
+		 ];
+		 $this->load->view('Exporting', $data);
 	}
 }

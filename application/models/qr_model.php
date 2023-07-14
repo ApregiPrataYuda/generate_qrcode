@@ -61,8 +61,16 @@ function checkimg($kode_qr){
 }
 
 
-function dataall() {
+
+
+function ambilalldata() {
   $sql = "SELECT * FROM dataqr ORDER BY kode_qr DESC";
+  $query = $this->db->query($sql)->result();
+  return $query;
+}
+
+function alls($pointpost) {
+  $sql = "SELECT * FROM dataqr WHERE kode_qr = '$pointpost'";
   $query = $this->db->query($sql)->result();
   return $query;
 }

@@ -13,7 +13,11 @@
         </div>
       </div><!-- /.container-fluid -->
     </section>
-<hr>
+
+    
+    
+      
+
 <div class="col-12">
 <div id="flash" data-flash="<?= $this->session->flashdata('pesan') ?>"></div>
       <div id="flasherr" data-flasherr="<?= $this->session->flashdata('error') ?>"></div>
@@ -21,16 +25,20 @@
               <div class="card-header">
 
               <button type="button" class="btn btn-danger mb-1" data-toggle="modal" data-target="#exampleModal">
-                Create New Generate Qr
+               <i class="fa fa-qrcode"></i> Create New Generate Qr
               </button>
-              <!-- <button type="button" class="btn btn-danger mb-1" data-toggle="modal" data-target="#sModal">
-                selection
-              </button> -->
+
               <button type="button" class="btn btn-danger mb-1" data-toggle="modal" data-target="#deleteModal">
-                Deleted selected
+              <i class="fa fa-trash"></i> Deleted selected
               </button>
-              <!-- <a href="<?= base_url('Createqr/Exportallexcel') ?>" class="btn btn-danger mb-1">Export to pdf</a> -->
-              </div>
+
+              <a href="<?= base_url('Createqr/Exports')?>" class="btn btn-success mb-1"><i class="fa fa-file-excel"></i> Export to Excel</a>
+              
+              <button type="button" class="btn btn-danger mb-1" data-toggle="modal" data-target="#sModal">
+              <i class="fa fa-check"></i> selection
+              </button>
+
+            </div>
               <div class="card-body">
               <h5 class="card-title  font-weight-bold text-danger">Data QR-CODE</h5>
                 <P class="card-text">
@@ -44,6 +52,8 @@
                 <p id="message_info"></p>
                 </div>
                 </div>
+
+                
 
                     <?php foreach ($alldata as $key => $value) : ?> 
                       <div class="card-footer bg-white">
@@ -59,7 +69,7 @@
                         <span class="mailbox-attachment-size clearfix mt-5">
                           <span class="mailbox-attachment-name">QR-code : <?= $value->kode_qr?></span>
                           <a href="<?= base_url('Createqr/singelpdf/'.$value->kode_qr)?>" class="btn btn-outline-danger btn-sm float-right ml-1"><i class="fas fa-file-pdf"></i></a>
-                          <a href="<?= base_url('Createqr/singelexcel/'.$value->kode_qr)?>" class="btn btn-outline-danger btn-sm float-right"><i class="fas fa-file-excel"></i></a>
+                          <a href="<?= base_url('Createqr/singelexcel/'.$value->kode_qr)?>" class="btn btn-outline-success btn-sm float-right"><i class="fas fa-file-excel"></i></a>
                         </span>
                   </div>
                 </li>
@@ -78,6 +88,8 @@
                 </div>
 
 
+
+
                 <!-- Modal -->
               <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
@@ -92,6 +104,7 @@
                     <div class="form-group">
                       <label for="kode_qr">Your Code</label>
                       <input type="text" class="form-control" id="kode_qr" placeholder="Enter new Code">
+                      <span id="messager"></span>
                     </div>
                     </div>
                     <div class="modal-footer">
@@ -115,35 +128,31 @@
                       </button>
                     </div>
                     <div class="modal-body">
-                       <a class="btn btn-danger btn-sm">export to Excel</a>
-                       <a class="btn btn-danger btn-sm" id="export">export to PDF</a>
+                      <button class="btn btn-success btn-sm" id="btn-export">Export to Excel</button>
+                      <form method="post" action="<?php echo base_url('Createqr/selectex') ?>" id="form-export">
                     <table class="table" id="example2">
                 <thead class="thead-dark">
                   <tr>
-                    <th scope="col" style="width:5%">#</th>
+                    <th scope="col" style="width:5%">No</th>
+                    <th><input type="checkbox" id="check-alls"> Select All</th>
                     <th scope="col">Kode</th>
                     <th scope="col">QR</th>
-                    <th scope="col" style="width:5%">Handle</th>
                   </tr>
                 </thead>
                 <tbody>
                   <?php foreach ($x as $key => $value) :?>
                   <tr>
                     <th scope="row"><?=$key + 1;?></th>
+                    <td><input type='checkbox' class='checks' name='kode_qr[]' value='<?= $value->kode_qr ?>'></td>
                     <td><?=$value->kode_qr;?></td>
                     <td>
                     <img src="<?=base_url('assets/image/Qrcode/'.$value->kode_qr.'.png')?>" style="width:20px;">
-                    </td>
-                    <td>
-                    <div class="form-check form-check-inline" id="cbtest">
-                     <input type="checkbox" id="x" name="x" value="<?=$value->kode_qr?>">
-                     <!-- <input type="checkbox" data-id="<?=$value->kode_qr?>"> -->
-                    </div>
                     </td>
                     </tr>
                     <?php endforeach; ?>
                   </tbody>
                 </table>
+                  </form>
                     </div>
                   </div>
                 </div>
@@ -249,30 +258,6 @@
                          }
                      })
 
-                      // for selected export
-                     $(document).on('click','#export', function() {
-                      var getAll = new Array();
-                      $('input[name="x"]:checked').each(function() {
-                        getAll.push(this.value);
-                      });
-                       $.ajax({
-                        type : 'POST',
-                            url : '<?= site_url('Createqr/getarr')?>',
-                            data :{
-                                   'kode_qr' : getAll
-                            },
-                            datatype:'json',
-                            success: function(result){
-
-                              if (result.success) {
-                                  alert('gagal')
-                              }else
-                              {
-                                alert('success')
-                              }
-                            }
-                       })
-                    })
 
                     //for data tb
                     $('#delTb').DataTable({
@@ -285,9 +270,8 @@
                     "responsive": true,
                   });
                 });
-
-
-
+                
+               //code checklist
                 $(document).ready(function(){
                   $(document).on('click','#check-all', function() {
                       if($(this).is(":checked")){
@@ -296,14 +280,14 @@
                         $(".check-item").prop("checked", false);
                       }
                     })
-                    $("#btn-delete").click(function(){ // Ketika user mengklik tombol delete
+                    $("#btn-delete").click(function(){ 
                     var confirm = window.confirm("Are You Sure, Delete?");
                     if(confirm){
                       $("#form-delete").submit();
                     }
                 })
 
-
+                 //code search items
                 $('#searching').val("").focus();
                 $('#searching').keyup(function(e) {
                   var text = $(this).val();
@@ -323,7 +307,47 @@
                   }
                   e.preventDefault();
                 })
-               
+
+
+                $(document).on('click','#check-alls', function() {
+                  if($(this).is(":checked")){
+                        $(".checks").prop("checked", true); 
+                      }else{
+                        $(".checks").prop("checked", false);
+                      }
+                      $(document).click('#btn-export', function() {
+                        var confirm = window.confirm("selection?");
+                        if (confirm) {
+                          $("#form-export").submit();
+                        }
+                      }) 
+                    
+                      
+
+
+                })
+                })
+              </script>
+
+              <script>
+                $(document).ready(function() {
+                  $('#kode_qr').keyup(function(){
+                    $('#messager').text('loading....');
+                     var code = $('#kode_qr').val()
+
+                     if (code == '' || code == 0) {
+                      $('#messager').text('loading....');
+                     }
+
+                     $.ajax({
+                      type    : 'POST',
+                      url     : '<?= site_url('Createqr/validation') ?>',
+                      data    : 'kode_qr='+code,
+                      success : function(data){
+                          $('#messager').html(data);
+                      }
+                  })
+                })
                 })
               </script>
 
