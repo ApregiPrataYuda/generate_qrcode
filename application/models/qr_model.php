@@ -70,8 +70,16 @@ function ambilalldata() {
 }
 
 function alls($pointpost) {
-  $sql = "SELECT * FROM dataqr WHERE kode_qr = '$pointpost'";
-  $query = $this->db->query($sql)->result();
-  return $query;
+  $x = $pointpost;
+
+
+  // var_dump($x); die();
+  return $this->db->query("SELECT * FROM dataqr 
+  --  where kode_qr in ('$x') 
+   where kode_qr in ('$x') 
+  order by id DESC")->result();
+  
 }
+
+
 }

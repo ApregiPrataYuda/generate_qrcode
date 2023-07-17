@@ -11,7 +11,7 @@
     <title>export pdf!</title>
   </head>
   <body>
-  <table class="table">
+  <!-- <table class="table">
   <thead>
     <tr>
       <th scope="col">#</th>
@@ -28,7 +28,12 @@
     </tr>
    <?php  } ?>
   </tbody>
-</table>
+</table> -->
+
+<?php foreach ($alls as $key => $value) { ?>
+      <img src="<?=base_url('assets/image/Qrcode/'.$value->kode_qr.'.png')?>" style="width:30%;">
+    <?php  } ?>
+
     <!-- Optional JavaScript; choose one of the two! -->
     <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>

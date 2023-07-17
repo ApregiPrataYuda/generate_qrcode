@@ -32,6 +32,7 @@
   </tbody>
 </table>
 
+
 <?php
 header("Content-Type: application/force-download");
 header("Content-Disposition: attachment;filename=\"GenerateAllData.xls\"");

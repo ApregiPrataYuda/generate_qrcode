@@ -10,8 +10,9 @@
   </head>
   <body>
 
-  
-      <img src="<?=base_url('assets/image/Qrcode/'.$getsdata->kode_qr.'.png')?>" style="width:30%;">
+    <?php foreach ($getsdata as $key => $value) { ?>
+      <img src="<?=base_url('assets/image/Qrcode/'.$value->kode_qr.'.png')?>" style="width:30%;">
+    <?php  } ?>
 
 
 <?php

@@ -5,7 +5,7 @@ class Createqr extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-        $this->load->model(['qr_model','Dash_m']);
+        $this->load->model(['qr_model','Dash_m','Multiple_model']);
 	}
 
 	public function index()
@@ -45,6 +45,7 @@ class Createqr extends CI_Controller {
 
 		//for del
 		$data['allsdata'] = $this->Dash_m->get()->result();
+		$data['codex'] = $this->Multiple_model->generatekode();
 		
 		$this->template->load('template','Createqr',$data);
 	}
@@ -143,6 +144,7 @@ class Createqr extends CI_Controller {
 
 	function Exports() {
 		$getingall = $this->qr_model->ambilalldata();
+
 		$data = [
 			'getdata' => $getingall
 		];
@@ -152,15 +154,53 @@ class Createqr extends CI_Controller {
 
 	function selectex() {
 		$pointpost = $this->input->post('kode_qr');
-         
-		$x = $this->qr_model->alls($pointpost);
+		// $exp      = [$pointpost][0];
+		
 
-		var_dump($x); die();
-        
-		 
+		$gets = $this->qr_model->alls($pointpost);
+		
+		var_dump($gets); die();
 		 $data = [
-			'getsdata' => $pointpost
+			'getsdata' => $gets
 		 ];
 		 $this->load->view('Exporting', $data);
 	}
+
+
+
+	public function Multipleform()
+	{
+		if ($_POST == NULL) {
+			$this->template->load('template','Multiple/Multipleform');
+		}else {
+			redirect('Createqr/Multiple_post/'.$_POST['banyak_data']);
+		}
+	
+	}
+
+
+	public function Multiple_post($banyak_data=1)
+	{
+    
+		if ($this->input->post('kode_qr') != '') {
+		foreach ($this->input->post('kode_qr') as $key => $value) {
+			$arr[] = [
+				'kode_qr' => $value,
+			  ];
+		}
+		$this->Multiple_model->add($arr);
+		if ($this->db->affected_rows() > 0) {
+			$this->session->set_flashdata('pesan', "Data Successfully Saved");
+		}
+		redirect('Createqr');
+	}
+
+    	$code = $this->Multiple_model->generatekode();
+		$data = [
+			'banyak_data' => $banyak_data,
+			'qrcode' => $code
+		];
+		$this->template->load('template','Multiple/Multiplepost',$data);
+}
+
 }

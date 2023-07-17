@@ -130,7 +130,7 @@
       <div class="float-right d-none d-sm-block">
         <b>Version</b> 0.0.0
       </div>
-      <strong>Copyright &copy; 2023 <a class="text-info" href="">QR-Create</a>.</strong> All rights reserved.
+      <strong>Copyright &copy; 2023 <a class="text-danger" href="">QR-Create</a>.</strong> All rights reserved.
     </footer>
 
     <!-- Control Sidebar -->
@@ -193,11 +193,34 @@
   <script>
     var flash = $('#flash').data('flash');
     if (flash) {
-      Swal.fire({
-        icon: 'success',
-        title: 'success',
-        text: flash
-      })
+      // Swal.fire({
+      //   icon: 'success',
+      //   title: 'success',
+      //   text: flash
+      // })
+                         let timerInterval
+                                Swal.fire({
+                                  title: 'success saved!',
+                                  html: 'Generate QR-code in<b></b> milliseconds.',
+                                  timer: 2000,
+                                  timerProgressBar: true,
+                                  didOpen: () => {
+                                    Swal.showLoading()
+                                    const b = Swal.getHtmlContainer().querySelector('b')
+                                    timerInterval = setInterval(() => {
+                                      b.textContent = Swal.getTimerLeft()
+                                    }, 100)
+                                  },
+                                  willClose: () => {
+                                    clearInterval(timerInterval)
+                                    window.location.href = "<?= base_url('Createqr')?>";
+                                  }
+                                }).then((result) => {
+                                  /* Read more about handling dismissals below */
+                                  if (result.dismiss === Swal.DismissReason.timer) {
+                                    console.log('I was closed by the timer')
+                                  }
+                                })
     }
 
 

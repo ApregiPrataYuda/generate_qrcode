@@ -28,6 +28,8 @@
                <i class="fa fa-qrcode"></i> Create New Generate Qr
               </button>
 
+              <a href="<?= base_url('Createqr/Multipleform')?>" class="btn btn-warning mb-1"><i class="fa fa-qrcode"></i> Create Multiple Generate QR</a>
+
               <button type="button" class="btn btn-danger mb-1" data-toggle="modal" data-target="#deleteModal">
               <i class="fa fa-trash"></i> Deleted selected
               </button>
@@ -37,6 +39,8 @@
               <button type="button" class="btn btn-danger mb-1" data-toggle="modal" data-target="#sModal">
               <i class="fa fa-check"></i> selection
               </button>
+
+  
 
             </div>
               <div class="card-body">
@@ -87,9 +91,6 @@
                 </div>
                 </div>
 
-
-
-
                 <!-- Modal -->
               <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
@@ -103,7 +104,7 @@
                     <div class="modal-body">
                     <div class="form-group">
                       <label for="kode_qr">Your Code</label>
-                      <input type="text" class="form-control" id="kode_qr" placeholder="Enter new Code">
+                      <input type="text" class="form-control" id="kode_qr" value="<?= $codex?>" placeholder="Enter new Code" readonly>
                       <span id="messager"></span>
                     </div>
                     </div>
@@ -128,7 +129,7 @@
                       </button>
                     </div>
                     <div class="modal-body">
-                      <button class="btn btn-success btn-sm" id="btn-export">Export to Excel</button>
+                     
                       <form method="post" action="<?php echo base_url('Createqr/selectex') ?>" id="form-export">
                     <table class="table" id="example2">
                 <thead class="thead-dark">
@@ -152,6 +153,7 @@
                     <?php endforeach; ?>
                   </tbody>
                 </table>
+                <button class="btn btn-success btn-sm" id="btn-export">Export to Excel</button>
                   </form>
                     </div>
                   </div>
@@ -315,17 +317,23 @@
                       }else{
                         $(".checks").prop("checked", false);
                       }
-                      $(document).click('#btn-export', function() {
+                      // $(document).click('#btn-export', function() {
+                      //   var confirm = window.confirm("selection?");
+                      //   if (confirm) {
+                      //     $("#form-export").submit();
+                      //   }
+                      // }) 
+
+                      
+                      $('#btn-export').click(function() {
                         var confirm = window.confirm("selection?");
                         if (confirm) {
-                          $("#form-export").submit();
+                         $("#form-export").submit();
                         }
-                      }) 
-                    
-                      
-
-
+                      })
                 })
+
+
                 })
               </script>
 
