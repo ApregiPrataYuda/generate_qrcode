@@ -153,17 +153,10 @@ class Createqr extends CI_Controller {
 
 
 	function selectex() {
-		$pointpost = $this->input->post('kode_qr');
-		// $exp      = [$pointpost][0];
-		
-
-		$gets = $this->qr_model->alls($pointpost);
-		
-		var_dump($gets); die();
-		 $data = [
-			'getsdata' => $gets
-		 ];
-		 $this->load->view('Exporting', $data);
+		$pointpost = [
+			 'kode' => $this->input->post('kode_qr')
+		];
+		 $this->load->view('Exporting', $pointpost);
 	}
 
 

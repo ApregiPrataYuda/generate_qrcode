@@ -69,17 +69,7 @@ function ambilalldata() {
   return $query;
 }
 
-function alls($pointpost) {
-  $x = $pointpost;
 
-
-  // var_dump($x); die();
-  return $this->db->query("SELECT * FROM dataqr 
-  --  where kode_qr in ('$x') 
-   where kode_qr in ('$x') 
-  order by id DESC")->result();
-  
-}
 
 
 }

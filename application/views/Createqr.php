@@ -36,8 +36,8 @@
 
               <a href="<?= base_url('Createqr/Exports')?>" class="btn btn-success mb-1"><i class="fa fa-file-excel"></i> Export to Excel</a>
               
-              <button type="button" class="btn btn-danger mb-1" data-toggle="modal" data-target="#sModal">
-              <i class="fa fa-check"></i> selection
+              <button type="button" class="btn btn-success mb-1" data-toggle="modal" data-target="#sModal">
+              <i class="fa fa-file-excel"></i> <i class="fa fa-check-square"></i> selection and export
               </button>
 
   
@@ -80,13 +80,12 @@
                 </ul>
                     </div>
                   <?php endforeach; ?>
-                  <div class="row ml-2">
+                </div>
+                <div class="row ml-5">
                   <div class="col">
                     <?php echo $pagination ?>
                   </div>
                 </div>
-                </div>
-                
                 </div>
                 </div>
                 </div>
@@ -153,7 +152,7 @@
                     <?php endforeach; ?>
                   </tbody>
                 </table>
-                <button class="btn btn-success btn-sm" id="btn-export">Export to Excel</button>
+                  <button class="btn btn-success btn-sm" id="btn-export" style="display:none;">Export to Excel</button>
                   </form>
                     </div>
                   </div>
@@ -212,7 +211,7 @@
 
               <script>
 
-                //add code
+                //add code by one 
                 $(document).ready(function(){
                      $(document).on('click', '#Add', function(){
                       var kode = $('#kode_qr').val()
@@ -273,7 +272,7 @@
                   });
                 });
                 
-               //code checklist
+               //code checklist delete
                 $(document).ready(function(){
                   $(document).on('click','#check-all', function() {
                       if($(this).is(":checked")){
@@ -310,21 +309,15 @@
                   e.preventDefault();
                 })
 
-
+                // code for select export
                 $(document).on('click','#check-alls', function() {
                   if($(this).is(":checked")){
                         $(".checks").prop("checked", true); 
+                        $('#btn-export').show();
                       }else{
                         $(".checks").prop("checked", false);
+                        $('#btn-export').hide();
                       }
-                      // $(document).click('#btn-export', function() {
-                      //   var confirm = window.confirm("selection?");
-                      //   if (confirm) {
-                      //     $("#form-export").submit();
-                      //   }
-                      // }) 
-
-                      
                       $('#btn-export').click(function() {
                         var confirm = window.confirm("selection?");
                         if (confirm) {
@@ -333,20 +326,32 @@
                       })
                 })
 
-
+                $(document).on('click', '.checks', function() {
+                  var check_count= $(".checks:checked");
+                  if (check_count.length>0) {
+                    $('#btn-export').show();
+                  }else{
+                    $('#btn-export').hide();
+                  }
+                  $('#btn-export').click(function() {
+                        var confirm = window.confirm("selection?");
+                        if (confirm) {
+                         $("#form-export").submit();
+                        }
+                      })
+                })
                 })
               </script>
 
+              <!-- validation -->
               <script>
                 $(document).ready(function() {
                   $('#kode_qr').keyup(function(){
                     $('#messager').text('loading....');
                      var code = $('#kode_qr').val()
-
                      if (code == '' || code == 0) {
                       $('#messager').text('loading....');
                      }
-
                      $.ajax({
                       type    : 'POST',
                       url     : '<?= site_url('Createqr/validation') ?>',

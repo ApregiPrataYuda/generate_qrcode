@@ -6,18 +6,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
-    <title>All Data</title>
+    <title>Generate-Qr</title>
   </head>
   <body>
-
-    <?php foreach ($getsdata as $key => $value) { ?>
-      <img src="<?=base_url('assets/image/Qrcode/'.$value->kode_qr.'.png')?>" style="width:30%;">
-    <?php  } ?>
-
-
+<table class="table">
+  <thead class="thead-light">
+    <tr>
+      <th style="width:100px;">No</th>
+      <th style="width:100px;">Kode</th>
+      <th style="width:350px;">QR-CODE</th>
+    </tr>
+  </thead>
+  <tbody>
+  <?php
+    $no=1;
+    foreach ($kode as $value) { ?>
+    <tr  style="height:350px;">
+      <th scope="row"><?= $no++;?></th>
+      <td><?= $value?></td>
+      <td><img src="<?=base_url('assets/image/Qrcode/'.$value.'.png')?>" style="width:100px;"></td>
+    </tr>
+    <?php }?>
+  </tbody>
+</table>
 <?php
+$filename = "Generate-Qr-".date('Y-m-d') . ".xls";    
 header("Content-Type: application/force-download");
-header("Content-Disposition: attachment;filename=\"GenerateAllData.xls\"");
+header("Content-Disposition: attachment;filename=\"$filename\"");
 header("Content-Transfer-Encoding: BINARY");
 ?>
     <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
