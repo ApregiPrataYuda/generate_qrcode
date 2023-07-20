@@ -10,7 +10,13 @@
   </head>
   <body>
 
-  <table class="table" border="1">
+  <?php
+    foreach ($getdata as $value) { ?>
+      <img src="<?=base_url('assets/image/Qrcode/'.$value->kode_qr.'.png')?>">
+      <span><?= $value->kode_qr?></span>
+    <?php }?>
+
+  <!-- <table class="table" border="1">
   <thead>
     <tr>
       <th style="width:100px;">No</th>
@@ -30,7 +36,7 @@
     <?php } ?>
    
   </tbody>
-</table>
+</table> -->
 
 
 <?php

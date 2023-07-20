@@ -63,10 +63,17 @@
                       <div class="card-footer bg-white">
                 <ul class="mailbox-attachments d-flex align-items-stretch clearfix">
                  <li>
-                  <span class="mailbox-attachment-icon"><?php
-                  $qrCode = new Endroid\QrCode\QrCode($value->kode_qr);
-                        $qrCode->writeFile('assets/image/Qrcode/'.$value->kode_qr.'.png');
-                  ?>
+                  <span class="mailbox-attachment-icon">
+                   <!-- here code new -->
+                   <?php
+                      $qrCode = new Endroid\QrCode\QrCode($value->kode_qr);
+                     
+                      $qrCode->setSize(268);
+                      $qrCode->setMargin(10);
+                  
+                      $qrCode->writeFile('assets/image/Qrcode/'.$value->kode_qr.'.png');
+                    ?>
+                   <!-- here code new -->
                   <img src="<?=base_url('assets/image/Qrcode/'.$value->kode_qr.'.png')?>" style="width:150px;"></span>
 
                   <div class="mailbox-attachment-info">
@@ -117,7 +124,7 @@
 
 
 
-               <!-- Modal -->
+               <!-- Modal for selected export-->
                <div class="modal fade" id="sModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                   <div class="modal-content">
@@ -128,9 +135,8 @@
                       </button>
                     </div>
                     <div class="modal-body">
-                     
                       <form method="post" action="<?php echo base_url('Createqr/selectex') ?>" id="form-export">
-                    <table class="table" id="example2">
+                    <table class="table" id="exTb">
                 <thead class="thead-dark">
                   <tr>
                     <th scope="col" style="width:5%">No</th>
@@ -152,8 +158,8 @@
                     <?php endforeach; ?>
                   </tbody>
                 </table>
-                  <button class="btn btn-success btn-sm" id="btn-export" style="display:none;">Export to Excel</button>
-                  </form>
+                <button class="btn btn-success btn-sm" id="btn-export">Export to Excel</button>
+              </form>
                     </div>
                   </div>
                 </div>
@@ -195,11 +201,11 @@
                         <?php } ?>
                       </tbody>
                       </table>
+                      <button type="button" class="btn btn-danger btn-sm" id="btn-delete">DELETE</button>
                       </form>
                     </div>
                     <div class="row mb-2 ml-2">
                       <div class="col">
-                        <button type="button" class="btn btn-danger btn-sm" id="btn-delete">DELETE</button>
                         <p class="font-italic text-danger"><small>(*noted*: disarankan Untuk delete one by one)</small></p>
                       </div>
                     </div>
@@ -270,23 +276,50 @@
                     "autoWidth": false,
                     "responsive": true,
                   });
+
+                  //for data tb
+                  $('#exTb').DataTable({
+                    "paging": true,
+                    "lengthChange": false,
+                    "searching": true,
+                    "ordering": false,
+                    "info": true,
+                    "autoWidth": false,
+                    "responsive": true,
+                  });
                 });
                 
                //code checklist delete
                 $(document).ready(function(){
                   $(document).on('click','#check-all', function() {
                       if($(this).is(":checked")){
-                        $(".check-item").prop("checked", true); 
+                        $(".check-item").prop("checked", true);
                       }else{
                         $(".check-item").prop("checked", false);
                       }
+                      $("#btn-delete").click(function(){ 
+                        var confirm = window.confirm("Are You Sure, Delete?");
+                        if(confirm){
+                          $("#form-delete").submit();
+                        }
+                       })
                     })
+
+                  //code  delete 
+                 $(document).on('click', '.check-item', function() {
+                  var check_count= $(".check-item:checked");
+                  if (check_count.length>0) {
                     $("#btn-delete").click(function(){ 
                     var confirm = window.confirm("Are You Sure, Delete?");
                     if(confirm){
                       $("#form-delete").submit();
                     }
+                  })
+                  }
                 })
+               
+
+
 
                  //code search items
                 $('#searching').val("").focus();
@@ -324,22 +357,21 @@
                          $("#form-export").submit();
                         }
                       })
-                })
+                    })
 
+                // code for select export
                 $(document).on('click', '.checks', function() {
                   var check_count= $(".checks:checked");
                   if (check_count.length>0) {
-                    $('#btn-export').show();
-                  }else{
-                    $('#btn-export').hide();
-                  }
-                  $('#btn-export').click(function() {
+                    $('#btn-export').click(function() {
                         var confirm = window.confirm("selection?");
                         if (confirm) {
                          $("#form-export").submit();
                         }
                       })
+                  }
                 })
+                
                 })
               </script>
 

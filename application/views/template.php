@@ -171,26 +171,6 @@
 
 
   <script>
-    $(function() {
-      $("#example1").DataTable({
-        "responsive": true,
-        "lengthChange": false,
-        "autoWidth": false,
-        // "buttons": ["copy", "csv"]
-      }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-      $('#example2').DataTable({
-        "paging": true,
-        "lengthChange": false,
-        "searching": true,
-        "ordering": true,
-        "info": true,
-        "autoWidth": false,
-        "responsive": true,
-      });
-    });
-  </script>
-
-  <script>
     var flash = $('#flash').data('flash');
     if (flash) {
       // Swal.fire({
@@ -198,7 +178,7 @@
       //   title: 'success',
       //   text: flash
       // })
-                         let timerInterval
+      let timerInterval
                                 Swal.fire({
                                   title: 'success saved!',
                                   html: 'Generate QR-code in<b></b> milliseconds.',

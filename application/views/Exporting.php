@@ -9,26 +9,33 @@
     <title>Generate-Qr</title>
   </head>
   <body>
-<table class="table">
-  <thead class="thead-light">
+
+  <?php
+    foreach ($kode as $value) { ?>
+      <img src="<?=base_url('assets/image/Qrcode/'.$value.'.png')?>">
+      <span><?= $value?></span>
+    <?php }?>
+
+
+<!-- batas code vertikal dan horizontal -->
+<!-- <table class="table">
+  <thead>
     <tr>
-      <th style="width:100px;">No</th>
-      <th style="width:100px;">Kode</th>
       <th style="width:350px;">QR-CODE</th>
     </tr>
   </thead>
   <tbody>
   <?php
-    $no=1;
     foreach ($kode as $value) { ?>
-    <tr  style="height:350px;">
-      <th scope="row"><?= $no++;?></th>
-      <td><?= $value?></td>
-      <td><img src="<?=base_url('assets/image/Qrcode/'.$value.'.png')?>" style="width:100px;"></td>
+    <tr style="height:200px;">
+      <th class="center"><img src="<?=base_url('assets/image/Qrcode/'.$value.'.png')?>">
+      <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+      <p style="text-align:center;"><?= $value?></p>
+       </th>
     </tr>
     <?php }?>
   </tbody>
-</table>
+</table> -->
 <?php
 $filename = "Generate-Qr-".date('Y-m-d') . ".xls";    
 header("Content-Type: application/force-download");

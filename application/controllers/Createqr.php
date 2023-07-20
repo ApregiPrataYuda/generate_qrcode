@@ -62,17 +62,6 @@ class Createqr extends CI_Controller {
 			echo json_encode();
 	}
 
- //belum selesai
-	public function getarr(){
-		$post = $this->input->post(null, true);
-          $data = [
-			'title' => 'tes',
-			'allData' => $post
-		  ];
-		 $this->load->view('Pdf',$data);
-	
-	    
-	}
 
 
 	public function singelpdf($codex){
@@ -90,13 +79,12 @@ class Createqr extends CI_Controller {
 
 
 	public function delbatch() {
-		// $kode_qr = $_POST['kode_qr'];
-		// var_dump($kode_qr); die();
-		// $x  = $kode_qr['kode_qr'];
 		$kode_qr = $this->input->post('kode_qr');
-		if ($kode_qr == null ) {
+		if ($kode_qr == null || $kode_qr == 0 || $kode_qr == '') {
 		    $this->session->set_flashdata('error', "Please Select Data");
+			redirect('Createqr');
 		}
+
 		$item = $this->qr_model->checkimg($kode_qr)->row();
 		$target_file = './assets/image/Qrcode/'.$item->kode_qr.'.png';
 		unlink($target_file);
@@ -144,7 +132,6 @@ class Createqr extends CI_Controller {
 
 	function Exports() {
 		$getingall = $this->qr_model->ambilalldata();
-
 		$data = [
 			'getdata' => $getingall
 		];
@@ -153,12 +140,16 @@ class Createqr extends CI_Controller {
 
 
 	function selectex() {
+
 		$pointpost = [
 			 'kode' => $this->input->post('kode_qr')
 		];
+		if ($pointpost == null || $pointpost == 0 || $pointpost == '') {
+		    $this->session->set_flashdata('error', "Please Select Data or Data Nothing");
+			redirect('Createqr');
+		}
 		 $this->load->view('Exporting', $pointpost);
 	}
-
 
 
 	public function Multipleform()
@@ -168,9 +159,7 @@ class Createqr extends CI_Controller {
 		}else {
 			redirect('Createqr/Multiple_post/'.$_POST['banyak_data']);
 		}
-	
 	}
-
 
 	public function Multiple_post($banyak_data=1)
 	{
