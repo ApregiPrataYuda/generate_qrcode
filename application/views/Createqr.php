@@ -360,17 +360,17 @@
                     })
 
                 // code for select export
-                $(document).on('click', '.checks', function() {
-                  var check_count= $(".checks:checked");
-                  if (check_count.length>0) {
-                    $('#btn-export').click(function() {
-                        var confirm = window.confirm("selection?");
-                        if (confirm) {
-                         $("#form-export").submit();
-                        }
-                      })
-                  }
-                })
+                // $(document).on('click', '.checks', function() {
+                //   var check_count= $(".checks:checked");
+                //   if (check_count.length>0) {
+                //     $('#btn-export').click(function() {
+                //         var confirm = window.confirm("selection?");
+                //         if (confirm) {
+                //          $("#form-export").submit();
+                //         }
+                //       })
+                //   }
+                // })
                 
                 })
               </script>
