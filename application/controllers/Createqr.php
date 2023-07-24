@@ -12,6 +12,7 @@ class Createqr extends CI_Controller {
 	{
 
         $config['base_url'] = site_url('Createqr/index');
+        // $config['base_url'] = site_url('Createqr');
 		$config['total_rows'] = $this->qr_model->get_count_all();
         $config['per_page'] = 10;
         $config['uri_segment'] = 3;

@@ -1,3 +1,4 @@
+
 <section class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
@@ -214,6 +215,7 @@
               </div>
 
 
+            
 
               <script>
 
@@ -346,10 +348,10 @@
                 $(document).on('click','#check-alls', function() {
                   if($(this).is(":checked")){
                         $(".checks").prop("checked", true); 
-                        $('#btn-export').show();
+                     
                       }else{
                         $(".checks").prop("checked", false);
-                        $('#btn-export').hide();
+                       
                       }
                       $('#btn-export').click(function() {
                         var confirm = window.confirm("selection?");
